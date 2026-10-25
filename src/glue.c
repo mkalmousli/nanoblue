@@ -72,14 +72,12 @@ void tray_sync(const Dev *d, int cnt, int sa, int shown) {
 	tray_menu(m, n);
 }
 
-static void raise_window(int *shown) {
-	*shown = 1;
-	ClearWindowState(FLAG_WINDOW_HIDDEN);
-}
+static void raise_window(int *shown) { *shown = 1, ClearWindowState(FLAG_WINDOW_HIDDEN); }
 
 /* handles a tray click (1 = icon, else menu id); returns 1 to quit */
 int tray_act(int e, int *shown, int *sa) {
 	if (e == QUIT) return 1;
+	if (e == TRAY_RAISE) return raise_window(shown), SetWindowFocused(), 0;
 	if (e == 1) *shown ? SetWindowState(FLAG_WINDOW_HIDDEN) : ClearWindowState(FLAG_WINDOW_HIDDEN), *shown = !*shown;
 	else if (e >= ADP && e < ADP + 10 * MAXA) {
 		int a = (e - ADP) / 10, op = (e - ADP) % 10;

@@ -11,6 +11,8 @@ extern int tray_nitems, tray_ev, menu_rev, tray_reg; /* tray_ev: menu id clicked
 extern char icon[160];
 extern unsigned char tray_pix[TS * TS * 4];
 
+#define TRAY_RAISE 5 /* tray_ev: show and focus the window */
+int tray_single(void);                 /* 1 if already running (raises that one) */
 int tray_init(void);                   /* StatusNotifierItem on the session bus; -1 without a tray host */
 void tray_update(const TrayState *s);  /* icon colour from state */
 void tray_menu(const Mi *m, int n);    /* replaces the menu, signals hosts only if it changed */

@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
 	double last = -9;
 	int demo = argc > 1 && !strcmp(argv[1], "--demo"), rc = cli(argc, argv);
 	if (rc >= 0) return rc;
+	if (!demo && tray_single()) return 0;
 	if (!demo && bt_init() < 0) return 1;
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
 	InitWindow(1400, 860, "Nanoblue"), SetWindowMinSize(320, 240);

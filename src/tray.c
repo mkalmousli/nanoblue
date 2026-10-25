@@ -51,8 +51,7 @@ static DBusHandlerResult watch(DBusConnection *c, DBusMessage *m, void *u) {
 
 int tray_init(void) {
 	char nm[64];
-	if (!(tray_bus = dbus_bus_get(DBUS_BUS_SESSION, NULL))) return -1;
-	dbus_connection_set_exit_on_disconnect(tray_bus, 0);
+	if (!tray_bus) return -1;
 	snprintf(nm, sizeof nm, "org.kde.StatusNotifierItem-%d-1", getpid());
 	if (dbus_bus_request_name(tray_bus, nm, 0, NULL) < 0) return tray_bus = NULL, -1;
 	dbus_connection_register_object_path(tray_bus, "/StatusNotifierItem", &vt, NULL);
