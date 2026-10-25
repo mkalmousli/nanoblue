@@ -8,7 +8,6 @@ int bt_nads, bt_busy, bt_dirty;
 char bt_status[128], bt_busy_path[96];
 DBusConnection *bus;
 
-/* NoInputNoOutput agent: accept everything with an empty reply */
 static DBusHandlerResult agent(DBusConnection *c, DBusMessage *m, void *u) {
 	if (dbus_message_get_type(m) != DBUS_MESSAGE_TYPE_METHOD_CALL) return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 	DBusMessage *r = dbus_message_new_method_return(m);
@@ -61,20 +60,23 @@ static void done(DBusPendingCall *pc, void *label) {
 	bt_dirty = 1;
 }
 
-void bt_call(const char *path, const char *iface, const char *method, const char *arg) {
+void bt_send(DBusConnection *c, DBusMessage *q, const char *label, const char *what) {
 	DBusPendingCall *pc;
-	DBusMessage *q;
-	if (!bus) return;
-	q = dbus_message_new_method_call(BZ, path, iface, method);
-	if (arg) dbus_message_append_args(q, DBUS_TYPE_OBJECT_PATH, &arg, DBUS_TYPE_INVALID);
-	snprintf(bt_status, sizeof bt_status, "%s...", method);
-	snprintf(bt_busy_path, sizeof bt_busy_path, "%s", arg ? arg : path);
-	if (dbus_connection_send_with_reply(bus, q, &pc, 60000) && pc) {
+	if (!c) return;
+	snprintf(bt_status, sizeof bt_status, "%s...", label);
+	snprintf(bt_busy_path, sizeof bt_busy_path, "%s", what);
+	if (dbus_connection_send_with_reply(c, q, &pc, 60000) && pc) {
 		bt_busy++;
-		dbus_pending_call_set_notify(pc, done, strdup(method), free);
+		dbus_pending_call_set_notify(pc, done, strdup(label), free);
 	}
 	dbus_message_unref(q);
-	dbus_connection_flush(bus);
+	dbus_connection_flush(c);
+}
+
+void bt_call(const char *path, const char *iface, const char *method, const char *arg) {
+	DBusMessage *q = dbus_message_new_method_call(BZ, path, iface, method);
+	if (arg) dbus_message_append_args(q, DBUS_TYPE_OBJECT_PATH, &arg, DBUS_TYPE_INVALID);
+	bt_send(bus, q, method, arg ? arg : path);
 }
 
 void bt_set(const char *path, const char *iface, const char *prop, int type, const void *val) {

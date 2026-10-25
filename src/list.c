@@ -29,9 +29,9 @@ int bt_list(Dev *d, int max) {
 		EACH(i, &ifs) {
 			DBusMessageIter props;
 			const char *in = kv(&i, &props);
-			int dv = !strcmp(in, D1), ad = !strcmp(in, A1), ba = !strcmp(in, "org.bluez.Battery1");
+			int dv = !strcmp(in, D1), ad = !strcmp(in, A1), ba = !strcmp(in, "org.bluez.Battery1"), nw = !strcmp(in, "org.bluez.Network1");
 			isdev |= dv, isad |= ad;
-			if (!dv && !ad && !ba) continue;
+			if (!dv && !ad && !ba && !nw) continue;
 			EACH(p, &props) {
 				DBusMessageIter var;
 				const char *k = kv(&p, &var);
@@ -39,12 +39,13 @@ int bt_list(Dev *d, int max) {
 				V v = {0};
 				int t = dbus_message_iter_get_arg_type(&vv);
 				if (!dbus_type_is_basic(t)) {
-					if (dv && t == 'a' && IS("UUIDs")) { EACH(u, &vv) x.uuids++; }
+					if (dv && t == 'a' && IS("UUIDs")) { EACH(u, &vv) { const char *s = ""; dbus_message_iter_get_basic(&u, &s), x.uuids++, x.caps |= uuid_cap(s); } }
 					continue;
 				}
 				dbus_message_iter_get_basic(&vv, &v);
 				if (dv) dev_prop(&x, k, t, v);
 				else if (ba && IS("Percentage")) x.battery = v.y;
+				else if (nw && IS("Connected") && v.i) x.caps |= CAP_NETUP;
 				else if (ad) adp_prop(&a, k, t, v);
 			}
 		}

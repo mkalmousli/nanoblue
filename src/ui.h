@@ -53,3 +53,5 @@ void brand(int W);                                  /* version pill + source lin
 void scrollbar(Rectangle r, float off, float content);
 void scroll_begin(Rectangle r, float *off, float content); /* wheel-scrolls everything drawn until scroll_end */
 void scroll_end(Rectangle r, float off, float content);
+float chips(float x, float y, float w, const Dev *d);   /* capability pills, returns the y below them */
+float actions(float x, float y, float w, const Dev *d); /* visual action list, returns the y below it */

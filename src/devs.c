@@ -66,27 +66,19 @@ static void signal_graph(Rectangle g, const Dev *d) {
 void detail(Rectangle r, const Dev *d) {
 	DrawRectangleRec(r, C_PANEL);
 	if (!d) { DrawText("Select a device", r.x + 20, r.y + 20, 20, C_DIM); return; }
-	static float off;
-	float x = r.x + 20, y = r.y + 20, bw = (r.width - 50) / 2;
+	static float off, ch = 1000; /* content height, measured last frame */
+	float x = r.x + 20, y = r.y + 20;
 	#define KV(k, ...) (DrawText(k, x, y, 15, C_DIM), DrawText(TextFormat(__VA_ARGS__), x + 90, y, 15, C_FG), y += 24)
-	scroll_begin(r, &off, 540);
+	scroll_begin(r, &off, ch);
 	DrawText(TextFormat("%.20s", d->name), x, y, 26, C_FG);
 	DrawText(d->blocked ? "BLOCKED" : d->connected ? "CONNECTED" : d->paired ? "PAIRED" : "DISCOVERED", x, y + 34, 16, dev_color(d));
 	y += 70;
 	KV("Address", "%s (%s)", d->addr, d->atype);
 	KV("Type", "%s", d->icon[0] ? d->icon : "unknown");
-	KV("Class", "0x%06X", d->cls);
-	KV("RSSI", d->rssi ? "%d dBm  ~%.1f m" : "n/a", d->rssi, pow(10, (-59 - d->rssi) / 20.0));
+	KV("Signal", d->rssi ? "%d dBm  ~%.1f m" : "n/a", d->rssi, pow(10, (-59 - d->rssi) / 20.0));
 	KV("Battery", d->battery >= 0 ? "%d%%" : "n/a", d->battery);
-	KV("Services", "%d UUIDs", d->uuids);
-	KV("Path", "%.26s", d->path + 11);
+	y = chips(x, y + 4, r.width - 40, d);
 	signal_graph((Rectangle){x, y + 4, r.width - 40, 56}, d);
-	y += 74;
-	if (button((Rectangle){x, y, bw, 38}, d->connected ? "DISCONNECT" : "CONNECT", d->connected ? C_RED : C_GREEN)) act(d, 'c');
-	if (button((Rectangle){x + bw + 10, y, bw, 38}, d->paired ? "RE-PAIR" : "PAIR", C_BLUE)) act(d, 'p');
-	if (button((Rectangle){x, y + 48, bw, 38}, d->trusted ? "UNTRUST" : "TRUST", C_CYAN)) act(d, 't');
-	if (button((Rectangle){x + bw + 10, y + 48, bw, 38}, d->blocked ? "UNBLOCK" : "BLOCK", C_YEL)) act(d, 'b');
-	if (button((Rectangle){x, y + 96, r.width - 40, 38}, "REMOVE", C_RED)) act(d, 'x');
-	if (button((Rectangle){x, y + 144, r.width - 40, 38}, "SERIAL TERMINAL", C_CYAN)) term_open(d);
-	scroll_end(r, off, 540);
+	ch = actions(x, y + 74, r.width - 40, d) + 10 - r.y;
+	scroll_end(r, off, ch);
 }

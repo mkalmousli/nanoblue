@@ -1,6 +1,7 @@
 #include "bt.h"
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #define IS(n) (!strcmp(k, n))
 
@@ -62,4 +63,14 @@ void adp_sys(Adp *a) {
 	base(p, a->driver, sizeof a->driver);
 	snprintf(p, sizeof p, "/sys/class/bluetooth/%s/device/subsystem", a->path + 11);
 	base(p, a->bus, sizeof a->bus);
+}
+
+unsigned uuid_cap(const char *u) {
+	static const struct { const char *id; unsigned cap; } T[] = {
+		{"110a", CAP_AUDIO}, {"110b", CAP_AUDIO}, {"110d", CAP_AUDIO}, {"1124", CAP_HID}, {"1812", CAP_HID},
+		{"111e", CAP_PHONE}, {"111f", CAP_PHONE}, {"1112", CAP_PHONE}, {"1105", CAP_OPP}, {"1116", CAP_NAP}, {"1101", CAP_SPP},
+	};
+	for (unsigned i = 0; strlen(u) > 8 && i < sizeof T / sizeof *T; i++)
+		if (!strncasecmp(u + 4, T[i].id, 4)) return T[i].cap;
+	return 0;
 }

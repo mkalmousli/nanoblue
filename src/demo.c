@@ -21,7 +21,7 @@ int demo_list(Dev *d, int max) {
 	cp(a[1].driver, sizeof a[1].driver, "btusb"), cp(a[1].bus, sizeof a[1].bus, "usb"), a[1].powered = 1;
 	bt_nads = 2;
 	for (int i = 0; i < (int)(sizeof D / sizeof *D) && i < max; i++) {
-		Dev x = { .adapter = 0, .paired = D[i].paired, .connected = D[i].conn, .trusted = D[i].paired, .rssi = D[i].rssi, .battery = D[i].bat, .uuids = 6 + i };
+		Dev x = { .adapter = 0, .paired = D[i].paired, .connected = D[i].conn, .trusted = D[i].paired, .rssi = D[i].rssi, .battery = D[i].bat, .uuids = 6 + i, .caps = i == 0 ? CAP_AUDIO | CAP_PHONE : i == 1 ? CAP_OPP | CAP_NAP | CAP_PHONE | CAP_NETUP : i == 2 || i == 3 ? CAP_HID : i == 4 ? CAP_HID | CAP_SPP : CAP_AUDIO };
 		cp(x.name, sizeof x.name, D[i].name), cp(x.addr, sizeof x.addr, D[i].addr), cp(x.icon, sizeof x.icon, D[i].icon), cp(x.atype, sizeof x.atype, "public");
 		cp(x.path, sizeof x.path, "/org/bluez/hci0/dev_demo");
 		d[i] = x;

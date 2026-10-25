@@ -27,6 +27,11 @@ Runtime libraries: `libdbus-1`, `libGL`, `libX11`, and BlueZ running (`bluetooth
 - Multiple adapters (hci0, hci1, ...) side by side, with scan and power per adapter
 - Adapter settings (`E`): alias, powered, discoverable, pairable, timeouts, rfkill block, driver info
 - Serial terminal over Bluetooth RFCOMM or a local tty (`/dev/ttyUSB*`, `ttyACM*`), hex/text view, baud and EOL control
+- Desktop notifications when devices connect, disconnect or pair, and when file transfers finish
+- Auto-connect per device (reconnects when it drops), saved in `~/.config/nanoblue/auto`
+- Send files over OBEX (file dialog via zenity/kdialog, or drop files on the window); needs `obexd`
+- Tether through a phone: "Use its network" joins its NAP and brings up `bnep0`
+- Visual action list per device with capability pills (audio, HID, phone, files, network, serial)
 - System tray icon (StatusNotifierItem) with menu; closing the window hides to the tray when a tray host exists
 - Auto update from GitHub releases (`NANOBLUE_NO_UPDATE=1` to disable, `nanoblue --update` to update now)
 - `nanoblue --demo` shows fake devices, no Bluetooth needed. `Ctrl +` / `Ctrl -` scales the UI.

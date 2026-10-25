@@ -34,16 +34,17 @@ int main(int argc, char **argv) {
 	InitWindow(1400, 860, "Nanoblue"), SetWindowMinSize(320, 240);
 	SetExitKey(KEY_NULL);
 	fonts_init();
-	if (!demo) tray_init(), upd_start();
+	if (!demo) tray_init(), xfer_init(), upd_start();
 	while (!quit) {
 		double t = GetTime();
 		if (WindowShouldClose()) { /* checked first so closing never waits on BlueZ; raylib re-arms it every poll */
 			if (tray_reg) shown = 0, SetWindowState(FLAG_WINDOW_HIDDEN); else break;
 		}
 		bt_process();
+		xfer_tick();
 		if ((bt_dirty && t - last > 0.1) || t - last > 2) {
 			int n = demo ? demo_list(all, MAXD) : bt_list(all, MAXD);
-			if (n >= 0) nall = n;
+			if (n >= 0) nall = n, events_tick(all, n), auto_tick(all, n);
 			bt_dirty = 0, last = t;
 		}
 		int tm = term_on() || adp_panel_on();
@@ -73,6 +74,11 @@ int main(int argc, char **argv) {
 		if (!tm && IsKeyPressed(KEY_O)) adp_act(sa, 'o');
 		for (int i = 0; i < 5 && nv && !tm; i++)
 			if (IsKeyPressed(km[i].key)) act(&v[sel], km[i].what);
+		if (IsFileDropped()) { /* drop files on the window to push them to the selected device */
+			FilePathList f = LoadDroppedFiles();
+			for (unsigned i = 0; i < f.count && nv; i++) xfer_send(&v[sel], f.paths[i]);
+			UnloadDroppedFiles(f);
+		}
 		if (!tm && IsKeyPressed(KEY_L)) term_open(NULL);
 		if (!tm && nv && IsKeyPressed(KEY_R)) term_open(&v[sel]);
 		ui_s = um * fminf(fmaxf(fminf((GetScreenWidth)() / 1150.f, (GetScreenHeight)() / 720.f), 0.45f), 2.5f); /* whole UI scales with the window */
