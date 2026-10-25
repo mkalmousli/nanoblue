@@ -81,15 +81,12 @@ int main(int argc, char **argv) {
 		}
 		if (!tm && IsKeyPressed(KEY_L)) term_open(NULL);
 		if (!tm && nv && IsKeyPressed(KEY_R)) term_open(&v[sel]);
-		ui_s = um * fminf(fmaxf(fminf((GetScreenWidth)() / 1150.f, (GetScreenHeight)() / 720.f), 0.45f), 2.5f); /* whole UI scales with the window */
+		ui_s = um * fminf(fmaxf(fminf((GetScreenWidth)() / 1150.f, (GetScreenHeight)() / 720.f), 0.8f), 2.5f); /* whole UI scales with the window */
 		int W = GetScreenWidth(), H = GetScreenHeight();
 		BeginDrawing();
 		rlScalef(ui_s, ui_s, 1);
 		backdrop(W, H);
-		sidebar((Rectangle){0, 48, 220, H - 76}, &sa);
-		if (term_on()) term_frame((Rectangle){220, 48, W - 220, H - 76});
-		else if (adp_panel_on()) adp_panel((Rectangle){220, 48, W - 220, H - 76});
-		else devlist((Rectangle){220, 48, W - 560, H - 76}, v, nv, &sel, &scroll), detail((Rectangle){W - 340, 48, 340, H - 76}, nv ? &v[sel] : NULL);
+		panes(W, H, v, nv, &sel, &scroll, &sa);
 		chrome(W, H);
 		EndDrawing();
 		snprintf(want, sizeof want, "%s", nv ? v[sel].addr : "");

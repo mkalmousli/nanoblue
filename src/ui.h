@@ -55,3 +55,4 @@ void scroll_begin(Rectangle r, float *off, float content); /* wheel-scrolls ever
 void scroll_end(Rectangle r, float off, float content);
 float chips(float x, float y, float w, const Dev *d);   /* capability pills, returns the y below them */
 float actions(float x, float y, float w, const Dev *d); /* visual action list, returns the y below it */
+void panes(int W, int H, Dev *v, int nv, int *sel, float *scroll, int *sa); /* lays out sidebar, list and detail for the window size */
