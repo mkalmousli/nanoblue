@@ -33,6 +33,9 @@ void chrome(int W, int H) {
 }
 
 void sidebar(Rectangle r, int *sa) {
+	static float off;
+	Rectangle area = {r.x, r.y, r.width, r.height - 56};
+	scroll_begin(area, &off, bt_nads * 178 + 20);
 	for (int i = 0; i < bt_nads; i++) {
 		Adp *a = &bt_ads[i];
 		Rectangle c = {r.x + 10, r.y + 10 + i * 178, r.width - 20, 168};
@@ -51,5 +54,6 @@ void sidebar(Rectangle r, int *sa) {
 		if (button((Rectangle){c.x + 102, c.y + 98, 78, 30}, "SCAN", a->scanning ? C_CYAN : C_DIM)) adp_act(i, 's');
 		if (button((Rectangle){c.x + 16, c.y + 132, 164, 30}, "SETTINGS", C_BLUE)) adp_panel_open(i);
 	}
+	scroll_end(area, off, bt_nads * 178 + 20);
 	if (button((Rectangle){r.x + 10, r.y + r.height - 48, r.width - 20, 38}, "SERIAL PORT", C_CYAN)) term_open(NULL);
 }

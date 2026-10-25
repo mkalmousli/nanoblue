@@ -50,3 +50,6 @@ void card(Rectangle r, Color base, int raised);     /* gradient surface, specula
 void led(float x, float y, float r, Color c, int on); /* glossy lens with glow */
 void backdrop(int w, int h);                        /* brushed dark backdrop with vignette */
 void brand(int W);                                  /* version pill + source link */
+void scrollbar(Rectangle r, float off, float content);
+void scroll_begin(Rectangle r, float *off, float content); /* wheel-scrolls everything drawn until scroll_end */
+void scroll_end(Rectangle r, float off, float content);

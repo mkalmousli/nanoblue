@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#define ROW 64
+#define ROW 72
 
 #define mix_(c) (Color){(c).r * 3 / 4 + 5, (c).g * 3 / 4 + 5, (c).b * 3 / 4 + 5, 255}
 
@@ -42,6 +42,7 @@ void devlist(Rectangle r, Dev *d, int n, int *sel, float *scroll) {
 		if (bt_busy && !strcmp(bt_busy_path, x->path)) spinner(xr - 120, mid, 10, C_YEL);
 	}
 	EndScissorMode();
+	scrollbar(r, *scroll, n * ROW + 8);
 }
 
 /* last ~15 s of RSSI for the selected device, sampled at 4 Hz */
@@ -65,8 +66,10 @@ static void signal_graph(Rectangle g, const Dev *d) {
 void detail(Rectangle r, const Dev *d) {
 	DrawRectangleRec(r, C_PANEL);
 	if (!d) { DrawText("Select a device", r.x + 20, r.y + 20, 20, C_DIM); return; }
+	static float off;
 	float x = r.x + 20, y = r.y + 20, bw = (r.width - 50) / 2;
 	#define KV(k, ...) (DrawText(k, x, y, 15, C_DIM), DrawText(TextFormat(__VA_ARGS__), x + 90, y, 15, C_FG), y += 24)
+	scroll_begin(r, &off, 540);
 	DrawText(TextFormat("%.20s", d->name), x, y, 26, C_FG);
 	DrawText(d->blocked ? "BLOCKED" : d->connected ? "CONNECTED" : d->paired ? "PAIRED" : "DISCOVERED", x, y + 34, 16, dev_color(d));
 	y += 70;
@@ -85,4 +88,5 @@ void detail(Rectangle r, const Dev *d) {
 	if (button((Rectangle){x + bw + 10, y + 48, bw, 38}, d->blocked ? "UNBLOCK" : "BLOCK", C_YEL)) act(d, 'b');
 	if (button((Rectangle){x, y + 96, r.width - 40, 38}, "REMOVE", C_RED)) act(d, 'x');
 	if (button((Rectangle){x, y + 144, r.width - 40, 38}, "SERIAL TERMINAL", C_CYAN)) term_open(d);
+	scroll_end(r, off, 540);
 }

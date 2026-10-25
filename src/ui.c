@@ -60,5 +60,3 @@ void radar(float x, float y, float r, Color c) {
 
 Color dev_color(const Dev *d) { return d->blocked ? C_RED : d->connected ? C_GREEN : d->paired ? C_BLUE : C_DIM; }
 
-#undef GetMousePosition
-Vector2 ui_mouse(Vector2 v) { return (Vector2){v.x / ui_s, v.y / ui_s}; }
