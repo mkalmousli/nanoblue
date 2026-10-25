@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nanoblue - Bluetooth manager and serial terminal for Linux</title>
+<meta name="description" content="Fast, good-looking Bluetooth manager and serial terminal for Linux. Pure C, raylib, BlueZ.">
+<meta property="og:title" content="Nanoblue"><meta property="og:description" content="Fast, good-looking Bluetooth manager and serial terminal for Linux.">
+<meta property="og:image" content="https://mkalmousli.github.io/nanoblue/social.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="logo.svg">
+<style>
+:root{--bg:#0b0e16;--fg:#e6ebf5;--dim:#8d9ab5;--card:#151b2b;--blue:#3d8bff}
+@media (prefers-color-scheme:light){:root{--bg:#f4f7fc;--fg:#111827;--dim:#566079;--card:#fff}}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 20% -10%,#1b3a7a55,transparent),var(--bg);color:var(--fg);font:17px/1.6 system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:56px 16px}header{text-align:center}header img{width:128px}
+h1{font-size:3rem;margin:.2em 0}p.sub{color:var(--dim);font-size:1.2rem;margin:0 auto 24px;max-width:560px}
+pre{background:var(--card);border:1px solid #ffffff1a;border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:.9rem}
+.shot{width:100%;border-radius:12px;box-shadow:0 20px 60px #0008;margin:24px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:28px 0}
+.grid div{background:var(--card);border-radius:12px;padding:16px;border:1px solid #ffffff14}.grid b{display:block;color:var(--blue)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.two img{width:100%;border-radius:10px}
+a{color:var(--blue)}footer{text-align:center;color:var(--dim);margin-top:48px}
+</style></head><body><main>
+<header><img src="logo.svg" alt="Nanoblue logo"><h1>Nanoblue</h1>
+<p class="sub">A fast, good-looking Bluetooth manager and serial terminal for Linux.</p></header>
+<h2>Install</h2><pre>curl -fsSL https://raw.githubusercontent.com/mkalmousli/nanoblue/main/scripts/install.sh | sh</pre>
+<h2>Uninstall</h2><pre>curl -fsSL https://raw.githubusercontent.com/mkalmousli/nanoblue/main/scripts/uninstall.sh | sh</pre>
+<img class="shot" src="main.png" alt="Nanoblue main window">
+<div class="grid">
+<div><b>Realtime</b>Live device list driven by BlueZ signals. Connect, pair, trust, block, remove.</div>
+<div><b>Multi adapter</b>hci0, hci1 and more, each with scan, power and full settings.</div>
+<div><b>Serial terminal</b>RFCOMM over Bluetooth or local USB serial ports, hex and text views.</div>
+<div><b>Tray and updates</b>Tray icon with menu, automatic updates from GitHub releases.</div>
+<div><b>Tiny</b>Pure C, raylib, no build system beyond one build.c; every file at most 100 lines.</div>
+<div><b>Everywhere on Linux</b>Builds for x86_64, aarch64, armv7, i386 and riscv64.</div></div>
+<div class="two"><img src="device.png" alt="Device details"><img src="settings.png" alt="Adapter settings"></div>
+<footer>Developed by <b>Mohamad Almousli</b> (<a href="https://github.com/mkalmousli">mkalmousli</a>) · MIT ·
+<a href="https://github.com/mkalmousli/nanoblue">GitHub</a> · <a href="https://github.com/mkalmousli/nanoblue/releases">Releases</a></footer>
+</main></body></html>
