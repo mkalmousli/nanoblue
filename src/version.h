@@ -1,4 +1,4 @@
-#define NB_VERSION "1.1.1"
+#define NB_VERSION "1.1.2"
 #define NB_REPO "mkalmousli/nanoblue"
 #define NB_HANDLE "mkalmousli"
 extern char upd_msg[96]; /* status of the background update check, empty when nothing to say */
