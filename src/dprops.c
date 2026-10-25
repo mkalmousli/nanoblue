@@ -30,3 +30,32 @@ DBusMessage *props_reply(DBusMessage *m, const char **nm, int (*put)(DBusMessage
 	}
 	return r;
 }
+
+int sni_put(DBusMessageIter *it, const char *k) {
+	const char *s = !strcmp(k, "Category") ? "ApplicationStatus" : !strcmp(k, "Id") ? "nanoblue"
+	              : !strcmp(k, "Title") ? "Nanoblue" : !strcmp(k, "Status") ? "Active" : !strcmp(k, "IconName") ? icon : NULL;
+	const char *mp = "/MenuBar";
+	const unsigned char *px = tray_pix;
+	dbus_bool_t f = 0;
+	dbus_uint32_t u = 0;
+	int wh = TS;
+	DBusMessageIter v, a, st, b;
+	if (s) vbasic(it, 's', &s);
+	else if (!strcmp(k, "ItemIsMenu")) vbasic(it, 'b', &f);
+	else if (!strcmp(k, "WindowId")) vbasic(it, 'u', &u);
+	else if (!strcmp(k, "Menu")) vbasic(it, 'o', &mp);
+	else if (!strcmp(k, "IconPixmap")) {
+		dbus_message_iter_open_container(it, DBUS_TYPE_VARIANT, "a(iiay)", &v);
+		dbus_message_iter_open_container(&v, DBUS_TYPE_ARRAY, "(iiay)", &a);
+		dbus_message_iter_open_container(&a, DBUS_TYPE_STRUCT, NULL, &st);
+		dbus_message_iter_append_basic(&st, DBUS_TYPE_INT32, &wh);
+		dbus_message_iter_append_basic(&st, DBUS_TYPE_INT32, &wh);
+		dbus_message_iter_open_container(&st, DBUS_TYPE_ARRAY, "y", &b);
+		dbus_message_iter_append_fixed_array(&b, DBUS_TYPE_BYTE, &px, sizeof tray_pix);
+		dbus_message_iter_close_container(&st, &b);
+		dbus_message_iter_close_container(&a, &st);
+		dbus_message_iter_close_container(&v, &a);
+		dbus_message_iter_close_container(it, &v);
+	} else return 0;
+	return 1;
+}

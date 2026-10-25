@@ -2,24 +2,28 @@
 #include <stddef.h>
 #define TS 64 /* tray icon edge in pixels */
 typedef struct { int visible, powered, scanning, connected; } TrayState;
+/* one dbusmenu entry; id doubles as the action code sent back in tray_ev */
+typedef struct { int id, parent, kind, on; char label[72], icon[28]; } Mi; /* kind: 0 item, 1 separator, 2 checkmark, 3 disabled label */
 extern DBusConnection *tray_bus;
 extern TrayState tray_st;
-extern int tray_ev; /* set by tray: 1 toggle window, 2 power, 3 scan, 4 quit */
+extern Mi tray_items[96];
+extern int tray_nitems, tray_ev, menu_rev, tray_reg; /* tray_ev: menu id clicked, 1 = icon activated */
+extern char icon[160];
+extern unsigned char tray_pix[TS * TS * 4];
 
-int tray_init(void);                   /* StatusNotifierItem on the session bus; 0 if a watcher took it */
-void tray_update(const TrayState *s);  /* refreshes icon + menu labels when state changed */
+int tray_init(void);                   /* StatusNotifierItem on the session bus; -1 without a tray host */
+void tray_update(const TrayState *s);  /* icon colour from state */
+void tray_menu(const Mi *m, int n);    /* replaces the menu, signals hosts only if it changed */
 void tray_process(void);
-void tray_pixels(unsigned char *argb, unsigned col); /* TS x TS bluetooth rune, bytes A R G B */
+void tray_pixels(unsigned char *argb, unsigned col);
 void tray_png(char *path, size_t n, const char *name, unsigned col);
 unsigned tray_color(void);
+void set_icon(void);
 
-/* shared with tmenu.c */
 void vbasic(DBusMessageIter *it, int type, const void *v);
+int sni_put(DBusMessageIter *it, const char *k);
 DBusMessage *props_reply(DBusMessage *m, const char **names, int (*put)(DBusMessageIter *, const char *));
 void menu_register(void);
 void menu_changed(void);
 DBusMessage *menu_layout(DBusMessage *m);
 DBusMessage *menu_group(DBusMessage *m);
-extern int menu_rev;
-extern char icon[160];
-void set_icon(void);

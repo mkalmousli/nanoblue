@@ -48,6 +48,7 @@ void tray_png(char *path, size_t n, const char *name, unsigned col) {
 }
 
 char icon[160];
+unsigned char tray_pix[TS * TS * 4];
 unsigned tray_color(void) { return tray_st.connected ? 0x3CDC8C : tray_st.powered ? 0x4696FF : 0x787E96; }
 
 void set_icon(void) {

@@ -49,3 +49,4 @@ void shadow(Rectangle r, float depth);              /* soft drop shadow under a 
 void card(Rectangle r, Color base, int raised);     /* gradient surface, specular edge, bevel */
 void led(float x, float y, float r, Color c, int on); /* glossy lens with glow */
 void backdrop(int w, int h);                        /* brushed dark backdrop with vignette */
+void brand(int W);                                  /* version pill + source link */

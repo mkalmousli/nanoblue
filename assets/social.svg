@@ -40,6 +40,6 @@
     <text x="560" y="300" font-size="116" font-weight="700">Nanoblue</text>
     <text x="564" y="368" font-size="36" fill="#9db4dc">Fast, beautiful Bluetooth manager</text>
     <text x="564" y="414" font-size="36" fill="#9db4dc">and serial terminal for Linux</text>
-    <text x="564" y="500" font-size="22" fill="#5fa8ff">Pure C · raylib · BlueZ · by Mohamad Almousli (mkalmousli)</text>
+    <text x="564" y="500" font-size="22" fill="#5fa8ff">Pure C · raylib · BlueZ · @mkalmousli</text>
   </g>
 </svg>

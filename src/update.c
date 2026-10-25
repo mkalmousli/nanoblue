@@ -51,7 +51,7 @@ void upd_start(void) {
 int cli(int argc, char **argv) {
 	const char *a = argc > 1 ? argv[1] : "";
 	char v[16];
-	if (!strcmp(a, "--version")) return printf("nanoblue %s\nby %s\nhttps://github.com/" NB_REPO "\n", NB_VERSION, NB_AUTHOR), 0;
+	if (!strcmp(a, "--version")) return printf("nanoblue %s\n@" NB_HANDLE "\nhttps://github.com/" NB_REPO "\n", NB_VERSION), 0;
 	if (!strcmp(a, "--update")) {
 		if (!latest(v, sizeof v)) return fprintf(stderr, "cannot reach GitHub\n"), 1;
 		if (!newer(v, NB_VERSION)) return printf("nanoblue %s is up to date\n", NB_VERSION), 0;

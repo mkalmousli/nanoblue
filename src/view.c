@@ -23,7 +23,7 @@ void chrome(int W, int H) {
 	DrawRectangle(0, 47, W, 1, (Color){255, 255, 255, 30});
 	dev_icon(28, 24, 18, "", C_CYAN);
 	DrawText("NANOBLUE", 56, 11, 26, C_FG);
-	DrawText(upd_msg[0] ? upd_msg : "v" NB_VERSION "  by " NB_AUTHOR, W - 12 - MeasureText(upd_msg[0] ? upd_msg : "v" NB_VERSION "  by " NB_AUTHOR, 14), 16, 14, upd_msg[0] ? C_YEL : C_DIM);
+	brand(W);
 	DrawText(TextFormat("%d adapter%s", bt_nads, bt_nads == 1 ? "" : "s"), 200, 18, 18, C_DIM);
 	if (bt_busy) DrawRectangleGradientH(fmodf(GetTime() * 700, W + 240) - 240, 44, 240, 4, BLANK, C_CYAN);
 	DrawRectangle(0, H - 28, W, 28, C_PANEL);
