@@ -8,9 +8,6 @@
 void tray_sync(const Dev *d, int n, int sa, int shown);
 int tray_act(int e, int *shown, int *sa);
 
-void *glfwGetCurrentContext(void); /* bundled in libraylib.a; lets us veto the close button */
-int glfwWindowShouldClose(void *);
-void glfwSetWindowShouldClose(void *, int);
 
 static const struct { int key; char what; } km[] = { {KEY_ENTER, 'c'}, {KEY_P, 'p'}, {KEY_T, 't'}, {KEY_B, 'b'}, {KEY_X, 'x'} };
 
@@ -39,8 +36,7 @@ int main(int argc, char **argv) {
 	if (!demo) tray_init(), upd_start();
 	while (!quit) {
 		double t = GetTime();
-		if (glfwWindowShouldClose(glfwGetCurrentContext())) { /* checked first so closing never waits on BlueZ */
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), 0);
+		if (WindowShouldClose()) { /* checked first so closing never waits on BlueZ; raylib re-arms it every poll */
 			if (tray_reg) shown = 0, SetWindowState(FLAG_WINDOW_HIDDEN); else break;
 		}
 		bt_process();
