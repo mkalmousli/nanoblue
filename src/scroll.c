@@ -25,7 +25,12 @@ void scrollbar(Rectangle r, float off, float content) {
 /* wheel-scrolls everything drawn until scroll_end; content is its total height */
 void scroll_begin(Rectangle r, float *off, float content) {
 	float max = content > r.height ? content - r.height : 0;
-	if (CheckCollisionPointRec(GetMousePosition(), r)) *off -= GetMouseWheelMove() * 50;
+	static float *drag; /* offset being dragged by its scrollbar */
+	Vector2 m = ui_mouse(GetMousePosition());
+	if (CheckCollisionPointRec(m, r)) *off -= GetMouseWheelMove() * 50;
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && max > 0 && CheckCollisionPointRec(m, (Rectangle){r.x + r.width - 22, r.y, 22, r.height})) drag = off;
+	if (!IsMouseButtonDown(MOUSE_LEFT_BUTTON)) drag = NULL;
+	if (drag == off) *off = (m.y - r.y - r.height * r.height / content / 2) / r.height * content;
 	*off = *off < 0 ? 0 : *off > max ? max : *off;
 	BeginScissorMode(r.x, r.y, r.width, r.height);
 	rlPushMatrix();

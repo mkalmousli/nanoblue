@@ -34,7 +34,7 @@ void devlist(Rectangle r, Dev *d, int n, int *sel, float *scroll) {
 		DrawRectangle(w.x, w.y + 8, 4, w.height - 16, c);
 		dev_icon(w.x + 36, mid, 20, x->icon, c);
 		if (x->connected) DrawCircleLinesV((Vector2){w.x + 36, mid}, 23 + 3 * sinf(GetTime() * 3), ColorAlpha(c, 0.5f));
-		DrawText(TextFormat("%.26s", x->name), w.x + 66, w.y + 10, 20, C_FG);
+		DrawText(TextFormat("%.*s", (int)fmaxf(8, fminf(26, (xr - 130 - w.x - 66) / 10)), x->name), w.x + 66, w.y + 10, 20, C_FG);
 		DrawText(TextFormat("%s  %s%s%s", x->addr, x->paired ? "PAIRED " : "", x->trusted ? "TRUSTED " : "",
 		                    x->blocked ? "BLOCKED" : ""), w.x + 66, w.y + 36, 14, C_DIM);
 		if (x->rssi) rssi_bars(xr, mid - 8, x->rssi), DrawText(TextFormat("%d", x->rssi), xr - 36, mid - 7, 14, C_DIM);

@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
 		}
 		if (!tm && IsKeyPressed(KEY_L)) term_open(NULL);
 		if (!tm && nv && IsKeyPressed(KEY_R)) term_open(&v[sel]);
-		ui_s = um * fminf(fmaxf(fminf((GetScreenWidth)() / 1150.f, (GetScreenHeight)() / 720.f), 0.8f), 2.5f); /* whole UI scales with the window */
+		ui_s = um * fminf(fmaxf(fminf((GetScreenWidth)() / 1150.f, (GetScreenHeight)() / 720.f), 1.15f), 2.5f); /* whole UI scales with the window */
 		int W = GetScreenWidth(), H = GetScreenHeight();
 		BeginDrawing();
 		rlScalef(ui_s, ui_s, 1);

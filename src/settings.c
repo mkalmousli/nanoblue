@@ -28,7 +28,7 @@ static void timeout(Rectangle r, float y, const char *k, const char *prop, unsig
 
 void adp_panel(Rectangle r) {
 	static int soft, hard, have;
-	static float off;
+	static float off, ch = 480; /* ch: content height, measured last frame */
 	static double t;
 	Adp *a;
 	float y = r.y + 70;
@@ -37,7 +37,7 @@ void adp_panel(Rectangle r) {
 	a = &bt_ads[ai];
 	if (GetTime() - t > 1) have = rf_state(&soft, &hard), t = GetTime();
 	DrawRectangleRounded((Rectangle){r.x + 8, r.y + 8, r.width - 16, r.height - 16}, 0.03f, 8, C_PANEL);
-	scroll_begin(r, &off, 480);
+	scroll_begin(r, &off, ch);
 	DrawText(TextFormat("ADAPTER %s SETTINGS", a->path + 11), r.x + 24, r.y + 22, 24, C_CYAN);
 	if (button((Rectangle){r.x + r.width - 110, r.y + 20, 86, 32}, "CLOSE", C_RED)) open_ = 0;
 	DrawText("Alias", r.x + 24, y + 4, 18, C_FG);
@@ -72,5 +72,6 @@ void adp_panel(Rectangle r) {
 	row(r, y += 26, "Address", a->addr);
 	row(r, y += 26, "Class", TextFormat("0x%06X", a->cls));
 	row(r, y += 26, "Modalias", a->modalias);
-	scroll_end(r, off, 480);
+	ch = y - r.y + 40;
+	scroll_end(r, off, ch);
 }
